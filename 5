@@ -1,0 +1,133 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+class Team {
+private:
+    string name;
+    string city;
+    int year;
+    string coach;
+
+public:
+    // Конструктор за замовчуванням
+    Team() : name(""), city(""), year(0), coach("") {
+        cout << "Team object created (default constructor)." << endl;
+    }
+
+    // Конструктор з параметрами
+    Team(string n, string c, int y, string co) : name(n), city(c), year(y), coach(co) {
+        if (y < 0) {
+            cout << "Invalid year! Setting to 0." << endl;
+            year = 0;
+        }
+        cout << "Team object created (parameterized constructor)." << endl;
+    }
+
+    // Деструктор
+    ~Team() {
+        cout << "Team object destroyed: " << name << endl;
+    }
+
+    // Метод для введення даних
+    void input() {
+        cout << "Enter team name: ";
+        getline(cin, name);
+        if (name.empty()) {
+            cout << "Invalid name! Setting to 'Unknown'." << endl;
+            name = "Unknown";
+        }
+
+        cout << "Enter city: ";
+        getline(cin, city);
+        if (city.empty()) {
+            cout << "Invalid city! Setting to 'Unknown'." << endl;
+            city = "Unknown";
+        }
+
+        cout << "Enter year of foundation: ";
+        cin >> year;
+        if (year < 0) {
+            cout << "Invalid year! Setting to 0." << endl;
+            year = 0;
+        }
+        cin.ignore();
+
+        cout << "Enter coach name: ";
+        getline(cin, coach);
+        if (coach.empty()) {
+            cout << "Invalid coach name! Setting to 'Unknown'." << endl;
+            coach = "Unknown";
+        }
+    }
+
+    // Метод для виведення даних
+    void display() const {
+        cout << "Team Name: " << name << endl;
+        cout << "City: " << city << endl;
+        cout << "Year of Foundation: " << year << endl;
+        cout << "Coach: " << coach << endl;
+    }
+
+    // Метод для оновлення даних
+    void update(string n, string c, int y, string co) {
+        if (!n.empty()) name = n;
+        if (!c.empty()) city = c;
+        if (y >= 0) year = y;
+        if (!co.empty()) coach = co;
+    }
+
+    // Метод для перевірки за критерієм
+    bool isFoundedAfter(int year_threshold) const {
+        return year > year_threshold;
+    }
+
+    // Геттер для року (для демонстрації критерію)
+    int getYear() const {
+        return year;
+    }
+};
+
+int main() {
+    vector<Team> teams;
+
+    // Додавання команд за допомогою конструктора з параметрами
+    teams.emplace_back("Real Madrid", "Madrid", 1902, "Carlo Ancelotti");
+    teams.emplace_back("Barcelona", "Barcelona", 1899, "Xavi Hernandez");
+
+    // Додавання команди через введення
+    cout << "Enter details for a new team:" << endl;
+    Team newTeam;
+    newTeam.input();
+    teams.push_back(newTeam);
+
+    // Виведення всіх команд
+    cout << "\nAll Teams:" << endl;
+    for (const auto& team : teams) {
+        team.display();
+        cout << "-----------------" << endl;
+    }
+
+    // Фільтр за критерієм
+    int year_threshold;
+    cout << "\nEnter year threshold to filter teams: ";
+    cin >> year_threshold;
+    cin.ignore();
+
+    cout << "\nTeams founded after " << year_threshold << ":" << endl;
+    bool found = false;
+    for (const auto& team : teams) {
+        if (team.isFoundedAfter(year_threshold)) {
+            team.display();
+            cout << "-----------------" << endl;
+            found = true;
+        }
+    }
+
+    if (!found) {
+        cout << "No teams found after the year " << year_threshold << "." << endl;
+    }
+
+    return 0;
+}
