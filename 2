@@ -1,0 +1,59 @@
+#include <iostream>
+#include <cmath> // Для математичних функцій
+
+using namespace std;
+
+// Структура для зберігання вхідних даних та результату
+struct CalculationData {
+    double x;
+    double a;
+    double b;
+    double y;
+    int flag; // Для вибору функції
+};
+
+// Функція для перевірки умов і вибору математичної функції
+int select_function(double x) {
+    if (x > 0) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+// Функція для розрахунку заданої математичної функції
+double calculate_function(double x, double a, double b) {
+    return pow(sqrt(a + x - b), 5) / (1.6 * pow(cos(3.2 * a * x), 3));
+}
+
+int main() {
+    CalculationData data;
+
+    // Введення параметрів
+    cout << "Enter a: ";
+    cin >> data.a;
+    cout << "Enter b: ";
+    cin >> data.b;
+    cout << "Enter x: ";
+    cin >> data.x;
+
+    // Вибір функції
+    data.flag = select_function(data.x);
+
+    if (data.flag == 1) {
+        // Розрахунок математичної функції
+        data.y = calculate_function(data.x, data.a, data.b);
+
+        // Виведення результату
+        cout << "Input Data:" << endl;
+        cout << "a = " << data.a << ", b = " << data.b << ", x = " << data.x << endl;
+        cout << "Result y = " << data.y << endl;
+    } else {
+        cout << "Error: x must be greater than 0 to calculate the function." << endl;
+    }
+
+    return 0;
+}
+
+
+
